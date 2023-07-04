@@ -1,38 +1,42 @@
 #!/usr/bin/python3
+"""A python module that determines if all boxes can be opened
+   from a list of lists
+"""
 
-def can_unlock_all(boxes):
+
+def canUnlockAll(boxes=[]):
+    """A function that returns True of all box in
+    boxes can be opend
     """
-    Check if it is possible to unlock all boxes in the given list.
-
-    Args:
-        boxes (list): A list of lists representing the boxes and their associated keys.
-
-    Returns:
-        bool: True if all boxes can be unlocked, False otherwise.
-    """
-    if len(boxes) == 0:
+    if not boxes:
         return False
 
-    num_boxes = len(boxes)
-    visited = [False] * num_boxes
-    visited[0] = True
-    queue = [0]
+    keys = set([0])
+    for box_id, box in enumerate(boxes):
+        for key in box:
+            if key < len(boxes) and key != box_id:
+                keys.add(key)
 
-    while queue:
-        current_box = queue.pop(0)
-        for key in boxes[current_box]:
-            if key < num_boxes and not visited[key]:
-                visited[key] = True
-                queue.append(key)
+    if len(keys) != len(boxes):
+        return False
 
-    return all(visited)
+    return True
 
-# Test cases
-boxes = [[1], [2], [3], [4], []]
-print(can_unlock_all(boxes))  # True
 
-boxes = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
-print(can_unlock_all(boxes))  # True
+if __name__ == '__main__':
+    boxes = [
+                [1, 3],
+                [2],
+                [3, 0],
+                [1, 2, 3],
+            ]
+    print(unlockBoxes(boxes))
 
-boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
-print(can_unlock_all(boxes))  # False
+    boxes = [[1], [2], [3], [4], []]
+    print(canUnlockAll(boxes))
+
+    boxes = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
+    print(unlockBoxes(boxes))
+
+    boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
+    print(unlockBoxes(boxes))
