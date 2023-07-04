@@ -1,6 +1,15 @@
 #!/usr/bin/python3
 
 def can_unlock_all(boxes):
+    """
+    Check if it is possible to unlock all boxes in the given list.
+
+    Args:
+        boxes (list): A list of lists representing the boxes and their associated keys.
+
+    Returns:
+        bool: True if all boxes can be unlocked, False otherwise.
+    """
     if len(boxes) == 0:
         return False
 
