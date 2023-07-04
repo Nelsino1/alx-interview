@@ -1,17 +1,30 @@
+#!/usr/bin/python3
+
 def canUnlockAll(boxes):
-    n = len(boxes)
-    visited = [False] * n  # Keep track of visited boxes
-    visited[0] = True  # Mark the first box as visited
-    stack = [0]  # Initialize the stack with the first box
+    if len(boxes) == 0:
+        return False
 
-    while stack:
-        box = stack.pop()  # Get the top box from the stack
+    num_boxes = len(boxes)
+    visited = [False] * num_boxes
+    visited[0] = True
+    queue = [0]
 
-        # Iterate over the keys in the current box
-        for key in boxes[box]:
-            if 0 <= key < n and not visited[key]:
-                visited[key] = True  # Mark the box as visited
-                stack.append(key)  # Add the box to the stack
+    while queue:
+        current_box = queue.pop(0)
+        for key in boxes[current_box]:
+            if key < num_boxes and not visited[key]:
+                visited[key] = True
+                queue.append(key)
 
-    # Check if all boxes have been visited
     return all(visited)
+
+# Test cases
+boxes = [[1], [2], [3], [4], []]
+print(canUnlockAll(boxes))  # True
+
+boxes = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
+print(canUnlockAll(boxes))  # True
+
+boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
+print(canUnlockAll(boxes))  # False
+
