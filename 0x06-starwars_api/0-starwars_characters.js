@@ -1,24 +1,37 @@
 #!/usr/bin/node
+const request = require('request');
 
-import requests
-import sys
+function getMovieCharacters(movieId) {
+  const url = `https://swapi.dev/api/films/${movieId}/`;
 
-def get_movie_characters(movie_id):
-    url = f"https://swapi.dev/api/films/{movie_id}/"
-    response = requests.get(url)
-    data = response.json()
+  request(url, function (error, response, body) {
+    if (error) {
+      console.error('Error:', error);
+      return;
+    }
 
-    if "characters" in data:
-        characters = data["characters"]
-        for character_url in characters:
-            character_response = requests.get(character_url)
-            character_data = character_response.json()
-            print(character_data["name"])
+    const movieData = JSON.parse(body);
+    const characters = movieData.characters;
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script_name.py <movie_id>")
-        sys.exit(1)
+    characters.forEach(function (characterUrl) {
+      request(characterUrl, function (error, response, body) {
+        if (error) {
+          console.error('Error:', error);
+          return;
+        }
 
-    movie_id = sys.argv[1]
-    get_movie_characters(movie_id)
+        const characterData = JSON.parse(body);
+        console.log(characterData.name);
+      });
+    });
+  });
+}
+
+if (process.argv.length !== 3) {
+  console.error('Usage: ./0-starwars_characters.js <movie_id>');
+  process.exit(1);
+}
+
+const movieId = process.argv[2];
+getMovieCharacters(movieId);
+
